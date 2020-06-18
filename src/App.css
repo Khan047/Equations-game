@@ -1,5 +1,6 @@
 .App {
-  text-align: center;
+  
+ 
 }
 
 .App-logo {
@@ -36,3 +37,69 @@
     transform: rotate(360deg);
   }
 }
+.mytable {
+
+  
+  
+}
+.cell {
+
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+    font-weight: bold;
+    
+    
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 5px;
+    padding:5px;
+
+  }
+td{
+  border:5px;
+    border: grey;
+}
+.demoWrapper {
+  padding: 10px;
+  background: rgb(243, 243, 243);
+  box-sizing: border-box;
+  /* resize: both; */
+  border: 1px dashed;
+  overflow: auto;
+  /* max-width: 800px;
+  max-height: 450px;
+  min-width: 300px;
+  min-height: 300px; */
+  max-width: inherit;
+  max-height: inherit;
+  min-width: inherit;
+  min-height: inherit;
+}
+#options{
+  position: absolute;
+  color:white;
+  background-color: indigo;
+  border-radius: 10px;
+}
+.parent {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 1px;
+  }
+  .parent2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 1px;
+    }
+    .rows{
+    height: 20px;
+    width: 20px;
+    }

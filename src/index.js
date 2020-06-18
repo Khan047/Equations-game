@@ -2,11 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import NexweaveSandbox from './components/NexweaveSanbox';
+import SimpleWidget from './widgets/simpleWidget'
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* <App/> */}
+    {/* <NexweaveSandbox widget={<SimpleWidget />} /> */}
+    <NexweaveSandbox widget={<App />} />
   </React.StrictMode>,
   document.getElementById('root')
 );
