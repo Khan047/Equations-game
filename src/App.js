@@ -3,7 +3,8 @@ import './App.css';
 import Input from './Input';
 import Table from './Table'
 import React, { Component } from 'react'
-import _, { contains, keys } from  'underscore';
+import _ from  'lodash';
+
 
 
 const FLAGS = {
@@ -21,15 +22,17 @@ export class App extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.setGame = this.setGame.bind(this);
     this.playGame = this.playGame.bind(this);
+    this.qArray = this.playGame.bind(this);
+    this.initPlayBoard = this.initPlayBoard.bind(this);
     this.state={
      
       gameSet:false,
-      arr:[],
+      
       neweq:[]
     }
   }
   swapBoxes = (fromBox, toBox) => {
-    let operators = ['+','+','+','+','+','+','*','+','+','+','+','+'];
+    
       console.log(fromBox,toBox);
       var table = document.getElementById('mytable');
       console.log(table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML!=='=')
@@ -44,9 +47,9 @@ export class App extends Component {
       }
       console.log(parseInt(table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML)+parseInt(table.rows[toBox.row].cells[toBox.col].childNodes[0].innerHTML))
 
-       this.checkDrop(toBox.row,toBox.col,table);
-
-     
+      //  this.checkDrop(toBox.row,toBox.col,table);
+      console.log(table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML)
+     this.checkSolutions(temp1,toBox.row,toBox.col);
 
 
   }
@@ -185,7 +188,7 @@ onChange=(rowIndex, columndIndex, e)=>{
   })
  
   console.log(e.key)
-  if(e.key === 'Enter'){
+  
     console.log(updatedRow)
     this.setState({
       ...this.state,
@@ -198,54 +201,35 @@ onChange=(rowIndex, columndIndex, e)=>{
     })
 
 
-}
-}
-setRandos(numArray){
-  var x = document.getElementsByTagName('td');
-  var j =0 ;
- 
-  for(let i=0;i<x.length;i++){
-    console.log(x[i].childNodes[0].innerHTML)
-    if(x[i].childNodes[0].innerHTML=='A'){
-      console.log(x[i].childNodes[0].innerHTML)
-      x[i].childNodes[0].innerHTML=numArray[j]
-      j++;
-    }
 
-  }
 }
 
 
 
-makeMissingBoard(gameObj){
 
-  // const keys = Object.keys(gameObj)
 
-  // keys.forEach( key => {
-  //   const row = gameObj[key]
-  //   const length = row.length
-
-  //   const toRemove = lenght % 2 == 0 ? length/2 : (Math.ceil(lenght/2)) - 1
-
-  // })
-  // return {
-  //   missingBoard: {},
-  //   options: []
-  // }
-}
 initPlayBoard(board){
 const keys = Object.keys(board);
 let lrow = [];
 let temp = [];
+let BoxData = {};
+let u =1;
 lrow = board[board[0].length-2];
+console.log(lrow)
 for(let i =0 ; i<lrow.length;i++){
   if(lrow[i]==='='){
     temp.push(FLAGS.CHECKBOX_IS_FALSE)
+    BoxData = {
+      ...BoxData,
+      [`c${u}`]:FLAGS.CHECKBOX_IS_FALSE
+    }
+    u++;
   }
   else{
     temp.push(FLAGS.CHECKBOX_IS_NA)
   }
 }
+u=1;
 keys.forEach(
   key =>{
     const row = board[key]
@@ -253,6 +237,11 @@ keys.forEach(
    
     if(row[row.length-2]==='='){
       row.push(FLAGS.CHECKBOX_IS_FALSE)
+      BoxData={
+        ...BoxData,
+        [`r${u}`]:FLAGS.CHECKBOX_IS_FALSE
+      }
+      u++;
     }
   else{
     row.push(FLAGS.CHECKBOX_IS_NA)
@@ -264,10 +253,43 @@ board = {
   ...board,
   checkCol:temp
 }
+console.log('BoxData is ',BoxData);
+this.setState({
+  checkboxFlags:BoxData
+},()=>{
+  console.log(this.state)
+})
 return board;
 }
+getQarray(a){
+  const opArray =[];
+  console.log("inside getQarray",a)
+  const aa = _.cloneDeep(a);
+  console.log("inside getQarray",aa)
+  
+  let length = aa[0].length;
+ 
+  console.log('row length'+length)
+  const toRemove = (length % 2 == 0) ? length/2 : (Math.ceil(length/2)) - 1;
+    console.log('toRemove'+toRemove)
+  for(let i=0;i<aa.length;i++){
+   
+    for(let j = 0 ; j<toRemove;j++){
+    let random = Math.floor(Math.random()*length);
+    console.log('random'+random)
+    //array[i][random]=' ';
+    opArray.push(aa[i][random]);
+    aa[i].splice(random,1,'B');
+  }
+ 
+}
+
+
+return [aa,opArray];
+}
+
 getSolarray(board){
-let temp  = [];
+const temp  = [];
 let  keys = Object.keys(board);
 keys.pop()
 keys.pop()
@@ -276,7 +298,7 @@ keys.pop()
   keys.forEach(
     key => {
       const row = board[key]
-      let t2 = [];
+      const t2 = [];
       const length = row.length -2 ;
       for(let i=0; i<length;i++){
         let x = parseInt(row[i])
@@ -284,170 +306,179 @@ keys.pop()
           console.log("key ="+key,"row[i] =",row[i],"i =",i)
           
           t2.push(row[i]);
-         
+         console.log('t2 is ',t2)
         }
       }if(t2.length!==0)temp.push(t2);
     }
   )
+  console.log('INSIDE SOL ARRAY',temp);
 return temp;
 }
-playGame(){
-  var resArray = [];
-  var numArray = [];
-  var gboard = this.state.neweq;
-  let solvedArr = this.getSolarray(gboard);
-  console.log(solvedArr)
-  gboard  = this.initPlayBoard(gboard);
-  console.log(gboard)
-  var finishedBoard = this.state.neweq;
-  var row = document.getElementById('rows').value;
-this.setState({
-  finishedBoard:finishedBoard,
-  gboard:gboard,
-  neweq:false,
-  playable:true
-},()=>{
-  console.log(this.state)
-});
 
-//  var joinArray = (a)=>{
-//     var str = '';
-//     for(let i=0;i<a.length-2;i++){
-//       // str += a[i];
-//       if(a[i]!=='+'||a[i]!=='='||a[i]!=='*'||a[i]!=='/'||a[i]!=='-'||a[i]!==' '||a[i]!==''||a[i]!=='B'){
-      
-//         numArray.push(parseInt(a[i]));
-//       }
-//     }
-//     resArray.push(a[a.length-1]);
-//     // for (let index = 0; index < a.length; index++) {
+
+
+setPlayBoard(LHSArray, checkboxData){
+  // const testCheckboxData = {
+  //   c1: FLAGS.CHECKBOX_IS_TRUE,
+  //   c2: FLAGS.CHECKBOX_IS_TRUE,
+  //   r1: FLAGS.CHECKBOX_IS_FALSE,
+  //   r2: FLAGS.CHECKBOX_IS_FALSE,
     
-//     //   resArray.push(parseInt(a[a.length-1]));
-//     //   console.log('last'+a[a.length-1])
-      
-//     // }
-//     //resArray = resArray.filter(Number);
-//    numArray=  numArray.filter(Number);
-//    resArray = resArray.filter(Number); 
-    
-//   }
-//   var resCol = [];
-//   Object.keys(gboard).forEach((key,id)=>{
-//     //joinArray(gboard[key])
-//     if(key==(row*2)){
-//       var b = gboard[key]
-//       for (let index = 0; index < b.length; index++) {
-//         b[index] = parseInt(b[index]);
-        
-//       }
-//       resCol = [...b];
-//       resCol = resCol.filter(Number)
-//     }
-//     if(key<(row*2-1)&&key<(row*2))
-//        { joinArray(gboard[key])}
-    
-      
-//   })
-//   console.log(numArray)
-//   console.log(resArray)
-//   console.log(resCol)
- 
+  // }
+  const testCheckboxData = _.cloneDeep(checkboxData)
+  this.setState((prevState) => {
+    const newGboard = _.cloneDeep(prevState.gboard)
+    console.log(newGboard)
+    const rows = LHSArray.length
+    const columns = LHSArray[0].length
   
-//   Object.keys(gboard).forEach((key,id)=>{
-//     //var random = Math.floor(Math.random() * gboard[key].length-2);
-//    if(key<(row*2)-1)   {    var i = 0;
-//  var j =0;
-//     var temp = [];
-//     while(i<gboard[key].length-2)
-//     {if(gboard[key][i]!=='+'||gboard[key][i]!=='='||gboard[key][i]!=='*'||gboard[key][i]!=='/'||gboard[key][i]!=='-'||gboard[key][i]!==' '||gboard[key][i]!==''||gboard[key][i]!=='B'){
-      
-//       temp.push(parseInt(gboard[key][i]));
-//     } 
-//   i++;
-//   } 
-//   temp = temp.filter(Number);
-//   var w = temp.length/2;
-//    while(j<w){
-//      if(w%2==0){
-//        j++;
-//        gboard[key][j] = ' ';
-//       j--;
-//      }
-//      else{ gboard[key][j] = ' ';}
-     
-//       j++;
-//    }}
-
-//   })
-//   var opts =  new Array(resCol.length+resArray.length).fill('A');
-//   gboard = {
-//     ...gboard,
-//     options:numArray
-
-//   }
-//   this.setState({
-//     finishedBoard:finishedBoard,
-//     gboard:gboard,
-//     neweq:false,
-    
-//     playable:true
-//   },()=>{
-//     console.log(this.state)
-//   })
-//   var x = document.getElementsByTagName('td');
-//   var j =0 ;
- 
-//  setTimeout(this.setRandos(numArray),3000)
+    for(let i=0; i<rows; i++) {
+      const gboardKey = 2*i
+      for(let j=0; j<columns; j++) {
+        const gboardColIndex = j*2;
+        newGboard[gboardKey][gboardColIndex] = LHSArray[i][j]
   
-
-}
-setTicks(){
-  var rows  = document.getElementById('rows').value;
-  var cols = document.getElementById('cols').value;
-  var x ='';
-  for(let i=0;i<rows.length;i++){
-    x=  <div>{this.state.r[i] ? '✔' :''}</div>
-  }
-return x;
-}
-checkDrop(ro,co,table){
-  // var ro = toBox.row;
-  // var co = toBox.col;
-  console.log(ro)
- 
-  let Array2D = (r,c) => [...Array(r)].map(x=>Array(c).fill(0));
-   
-  //var temp =Array2D(table.rows[0].length,table.cols.length);;
-  var temp = [];
-  if(ro!=='options'){
-    ro=parseInt(ro)
-    for (var c = 0, m = table.rows[ro].cells.length; c < m; c++) {
-        temp.push(table.rows[ro].cells[c].childNodes[0].innerHTML);
-   
+      }
+  
+      // check if checkbox data is present
+      if(testCheckboxData) {
+        console.log(`r${gboardKey}`,testCheckboxData[`r${i+1}`])
+        const gboardLastColIndex = newGboard[gboardKey].length - 1
+        newGboard[gboardKey][gboardLastColIndex] = testCheckboxData[`r${i+1}`]
+      }
+      
+    }
+  
+  
+    if (testCheckboxData) {//checkCol
+      const columnKeys = Object.keys(testCheckboxData).filter( key => key.includes('c'))
+      for (let i=0; i<columnKeys.length; i++) {
+        newGboard['checkCol'][2*i] = testCheckboxData[columnKeys[i]]
+      }
     }
 
-  //   for (var r = 0, n = table.rows[0].length; r < n; r++) {
-  //     for (var c = 0, m = table.rows[r].cells.length; c < m; c++) {
-          
-  //       temp[r][c] = table.rows[r].cells[c].childNodes[0].innerHTML;
+    console.log('newGboard:',newGboard)
+   
+    return {gboard:newGboard}
+  })
 
-  //     }
-  // }
-  }
-    console.log(temp);
-    //this.evaluate(temp)
 
 }
-evaluate(a){
-  var r =0;
-  a.pop();
-  a.pop();
-  var x =a.join('');
+playGame(){
   
-  console.log(x)
-   r  = eval(x);
-  console.log(r);
-  return r 
+  var gboard = _.cloneDeep(this.state.neweq);
+  console.log(gboard)
+  let solvedArr = this.getSolarray(gboard);
+  let solvedArr2 = _.cloneDeep(solvedArr)
+  console.log(solvedArr)
+   const OpsandMiss = this.getQarray(solvedArr2);
+  let options = OpsandMiss[1];
+  let missingArray = OpsandMiss[0]; 
+  gboard  = this.initPlayBoard(gboard);
+  gboard = {
+    [`${-1}`]:options,
+    ...gboard
+  }
+  this.setState((prevState) => {
+    return {
+      ...prevState,
+      missingArray:missingArray,
+      solvedArr:solvedArr,
+      gboard:gboard,
+      neweq:false,
+      playable:true
+    }
+  })
+console.log(solvedArr)
+  this.setPlayBoard(missingArray,this.state.checkboxFlags);
+ 
+  console.log(gboard)
+  
+  
+
+
+
+
+}
+checkSolutions(addedValue,r,c) {
+  console.log(addedValue);
+ 
+  let missArr = _.cloneDeep(this.state.missingArray);
+  let solvedArrr = _.cloneDeep(this.state.solvedArr);
+  console.log('solved arr is ',solvedArrr);
+  console.log('miss arrray is', missArr)
+  console.log(this.state)
+  if(r!=='-1'){
+             missArr[r/2][c/2] = addedValue;
+  }
+   console.log('msiarr is ',missArr)
+  
+  this.setState((prevState) => {
+    return {
+      ...prevState,
+      missingArray:missArr,
+    
+    }
+  })
+  // console.log(this.state)
+// get what user has changed and add it to missingArray
+
+// compare missing array and solution array and on the basis of comparision create the checkboxData.
+const checkboxData = _.cloneDeep(this.state.checkboxFlags)
+console.log('checkBox data',checkboxData)
+
+// for row, i in missngarray:
+//      rowFlag = True
+//      for col, j in enumearte(missngarray):
+//              solutionarrry[i][j] != missingarray[i][j]
+//               rowFlag = False
+
+//        if rowFlag: 
+          // checkboxData[f'r{i+1}'] = FLAG.CHECKBOX_is_ture
+//        else: 
+          // checkboxData[f'r{i+1}'] = FLAG.CHECKBOX_is_false
+for(let i =0 ; i<solvedArrr.length;i++){
+  let rowFlag = true;
+  for(let j =0;j<solvedArrr[i].length;j++){
+    if(solvedArrr[i][j]!==missArr[i][j]){
+       rowFlag = false;
+    }
+
+  }
+
+
+  if(rowFlag==true){
+    checkboxData[`r${i+1}`] = FLAGS.CHECKBOX_IS_TRUE;
+  
+  }
+  else{
+    checkboxData[`r${i+1}`] =FLAGS.CHECKBOX_IS_FALSE;
+  }
+}
+for(let i =0 ; i<solvedArrr[0].length;i++){
+  let colFlag = true;
+  for(let j =0;j<solvedArrr.length;j++){
+    if(solvedArrr[i][j]!==missArr[i][j]){
+       colFlag = false;
+    }
+
+  }
+
+
+  if(colFlag==true){
+    checkboxData[`c${i+1}`] = FLAGS.CHECKBOX_IS_TRUE;
+  
+  }
+  else{
+    checkboxData[`c${i+1}`] =FLAGS.CHECKBOX_IS_FALSE;
+  }
+}
+console.log(checkboxData)
+this.setPlayBoard(missArr,checkboxData);
+          
+        
+// pass new missingArray and checkboxdata to the estPlayboard()
+
 
 }
   render() {
@@ -471,24 +502,6 @@ evaluate(a){
           onDragStart={this.handleDragStart}
           onDragOver={this.handleDragOver}
           onDrop={this.handleDrop}/>:''}
-        
-       
-        <div class="rows">
-       
-       <div> {this.state.r0 ? '✔' :''} </div>
-       <div>{this.state.r1 ? '✔' :''}</div>
-       <div>{this.state.r2 ? '✔' :''}</div>
-       <div>{this.state.r3 ? '✔' :''}</div> 
-        
-     </div>
-     <div class="cols">
-       
-       <div> {this.state.c0 ? '✔' :''} </div>
-       <div>{this.state.c1 ? '✔' :''}</div>
-       <div>{this.state.c2 ? '✔' :''}</div>
-       <div>{this.state.c3 ? '✔' :''}</div> 
-        
-     </div>
       </div>
       <button onClick={this.setGame}>Set game</button>
         <button onClick={this.playGame}>Play Game</button>
