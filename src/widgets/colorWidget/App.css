@@ -1,0 +1,92 @@
+
+.main{
+
+
+   margin: 0 auto;
+   display: inline-block;
+   color:white;
+   
+
+}
+.flex-container {
+  /* margin:100px; */
+  /* position: absolute; */
+  /* top:20px;
+  left:700px; */
+  align-self: end;
+  display: inline-flex;
+  flex-direction: column;
+ 
+  justify-content: space-evenly;
+ 
+  
+
+
+
+
+
+}
+
+.flex-container > div {
+
+  background-color: #f1f1f1;
+  /* height: 70px;
+  margin: 50px;
+  width: 100px;
+  margin: 10px;
+   */
+  
+  text-align: center;
+  line-height: 75px;
+  font-size: 30px;
+
+}
+
+
+#test{
+  height: 100px;
+  width: 100px;
+}
+
+#spacer{
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+}
+.white{
+  color:white;
+  display: flex;
+}
+
+.cell {
+
+  font-size: 50px;
+  height: 100px;
+  width: 100px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.parent {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(9, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 30px;
+  text-align: center;
+  line-height: 75px;
+  font-size: 30px;
+  width:inherit;
+  color: green;
+
+  }
+  .game{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    height: inherit;
+    width: inherit;
+  }
+

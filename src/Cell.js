@@ -8,8 +8,19 @@ const Cell = ({ rowIndex, columnIndex, cellValue, onDragOver,onDragStart,onDrop 
           return <input 
               placeholder='OPERATOR' 
               size='1' 
+              
               // value={eqs[rowIndex][columnIndex]}
-              onChange={(event)=>{onChange(rowIndex, columnIndex, event)}} />
+              onChange={(event)=>{ 
+
+                if(event.target.value.match(/[+*\/-]/g)){
+                     onChange(rowIndex, columnIndex, event)
+                    }
+                    else{
+                      alert('Not a Valid Operator')
+                    }
+                    
+                    
+                    }} />
         }
         if (cellValue === '=' ) {
             return '='
@@ -17,7 +28,14 @@ const Cell = ({ rowIndex, columnIndex, cellValue, onDragOver,onDragStart,onDrop 
         if(cellValue === 'B'){
           return ""
         }
-        return <input placeholder='OPERAND' size='3' onChange={(event)=>{onChange(rowIndex, columnIndex, event)}}/>
+        return <input placeholder='OPERAND' size='1' onChange={(event)=>{
+          if(event.target.value.match(/[0-9]/g)){
+          onChange(rowIndex, columnIndex, event)
+        }
+        else{
+          alert('Not a Valid Operand')
+        }
+        }}/>
 
 
     }
@@ -41,17 +59,28 @@ const Cell = ({ rowIndex, columnIndex, cellValue, onDragOver,onDragStart,onDrop 
       return ''
      }
      if(cellValue==='CheckboxTrue'){
-       return '✔'
+       return <i className='tick'>'✔'</i>
      }
      return cellValue
    
    
     }
+    const setDrag=(c)=>{
+      console.log("inside set drag")
+        if(!c.match(/[+*\/-]/g)){
+            return "true"
+        }
+        else{
+          return "false"
+        }
+  
+    }
     return (
       <td id={columnIndex}>
-        <div  id={columnIndex} className="cell"   bg={bg} draggable ={cellValue!=='+'||cellValue!=='='||cellValue!=='-'||cellValue!=='*'||cellValue!=='/'?"true":'false'} onDragStart={onDragStart({ row:rowIndex,col:columnIndex })}
-          onDragOver={onDragOver({ row: rowIndex,col:columnIndex })}
-          onDrop={onDrop({ row: rowIndex,col:columnIndex })}>
+        <div  id={columnIndex} className="cell"   bg={bg} draggable ={setDrag(cellValue)} onDragStart={
+          onDragStart!==null?onDragStart({ row:rowIndex,col:columnIndex }):null}
+          onDragOver={ onDragOver!==null?onDragOver({ row: rowIndex,col:columnIndex }):null}
+          onDrop={onDrop!==null?onDrop({ row: rowIndex,col:columnIndex }):null}>
           
           
             {

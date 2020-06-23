@@ -1,17 +1,22 @@
 import React, { Component } from 'react'
 
 export class Input extends Component {
+    debugger
     render() {
-        return (
-            <div style={{
+        return 
+            // <div style={{
+            //     display:'flex',
+               
+            //     color: 'white',
+            //     height:20,
+            //     width:100
                 
-                color: 'white'
-              }}>
-                    Enter a Sample Eq   <input id= 'eqs' type='text' onKeyDown={(event)=>this.props.onChange(event)}></input>
-                    enter no of eqs<input id = 'rows'></input>
-                  cols <input id = 'cols'></input>
-            </div>
-        )
+            //   }}>
+
+                   
+            //       {/* cols <input id = 'cols'></input> */}
+            // </div>
+        
     }
 }
 

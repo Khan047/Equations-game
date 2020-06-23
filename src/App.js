@@ -24,6 +24,7 @@ export class App extends Component {
     this.playGame = this.playGame.bind(this);
     this.qArray = this.playGame.bind(this);
     this.initPlayBoard = this.initPlayBoard.bind(this);
+    this.swapBoxes = this.swapBoxes.bind(this);
     this.state={
      
       gameSet:false,
@@ -34,22 +35,63 @@ export class App extends Component {
   swapBoxes = (fromBox, toBox) => {
     
       console.log(fromBox,toBox);
-      var table = document.getElementById('mytable');
-      console.log(table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML!=='=')
+      let swapboard =this.state.gboard;
+      let frow = fromBox.row;
+      let fcol = fromBox.col;
+      let trow = toBox.row;
+      let tcol = toBox.col;
+      
+      
+      let temp = swapboard[frow][fcol];
+     
+      swapboard[frow][fcol] = swapboard[trow][tcol];
+      swapboard[trow][tcol] = temp;
+      let temp2 = swapboard[trow][tcol];
 
-      if(table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML!==' '&&table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML!=='='&&table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML!=='/'&&table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML!=='*'&&table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML!=='-'&&table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML!=='+'&&table.rows[toBox.row].cells[toBox.col].childNodes[0].innerHTML!=='/'&&table.rows[toBox.row].cells[toBox.col].childNodes[0].innerHTML!=='*'&&table.rows[toBox.row].cells[toBox.col].childNodes[0].innerHTML!=='-'&&table.rows[toBox.row].cells[toBox.col].childNodes[0].innerHTML!=='+'&&table.rows[toBox.row].cells[toBox.col].childNodes[0].innerHTML!=='=')
-      {
 
-          var temp1  = table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML;
-          table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML = table.rows[toBox.row].cells[toBox.col].childNodes[0].innerHTML;
-          table.rows[toBox.row].cells[toBox.col].childNodes[0].innerHTML = temp1;
 
+      console.log('swapped board is ',swapboard)
+      this.setState(
+      (prevState)=>{
+        return{
+          ...prevState,
+          gboard:swapboard
+        }
       }
-      console.log(parseInt(table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML)+parseInt(table.rows[toBox.row].cells[toBox.col].childNodes[0].innerHTML))
-
-      //  this.checkDrop(toBox.row,toBox.col,table);
-      console.log(table.rows[fromBox.row].cells[fromBox.col].childNodes[0].innerHTML)
-     this.checkSolutions(temp1,toBox.row,toBox.col);
+      )
+      let  keys = Object.keys(swapboard);
+      keys.pop()
+      keys.pop()
+      keys.pop()
+      keys.pop()
+        for(let k =0; k<keys.length;k++){
+          keys.splice(k+1,1);
+        }
+       console.log(keys)
+       let mArr = [];
+            
+        keys.forEach(
+          key => {
+            const row = swapboard[key]
+            const t2 = [];
+            const length = row.length -3 ;
+            for(let i=0; i<length;i++){
+              //let x = parseInt(row[i])
+              if(!isNaN(parseInt(row[i]))||row[i]==='B'){
+                console.log("key ="+key,"row[i] =",row[i],"i =",i)
+                
+                t2.push(row[i]);
+               console.log('t2 is ',t2)
+              }
+            }if(t2.length!==0)mArr.push(t2);
+          }
+        )
+        console.log('new miss array in swapboxes',mArr);
+     
+      console.log(this.state)
+    
+       this.checkSolutions(mArr);
+     
 
 
   }
@@ -97,21 +139,20 @@ export class App extends Component {
   }
   
   handleChange=(event)=>{
-   if(event.key==='Enter') {
+ 
   
- var x = event.target.value;
+ var x = document.getElementById('eqs').value;
+ if(this.checkNull(x)!=false){
  x = x.replace(/[+*\/-]/g, 'O');
  x = [...x];
- var colNos = 0;
- for(let i=0;i<x.length;i++){
-   
- }
+ 
+ 
 var r = document.getElementById('rows').value;
-//this.getIndices(r);
+
 var arr = new Array(r-1).fill(0);
 let j=0;
  for( let i=0;i<(r*2)-1;i++){
-  //console.log(i);
+ 
   i++;
   arr[j] = i;
   j++;
@@ -129,16 +170,16 @@ if(r!='null'||r!='undefined'){
  
  var slast=  new Array(eq[0].length).fill('=');
  var ops =  new Array(eq[0].length).fill('O');
- var last =  new Array(eq[0].length).fill('O');
+ var last =  new Array(eq[0].length).fill('R');
  let j=0;
  for( let i=0;i<ops.length-1;i++){
-  //console.log(i);
+ 
   i++;
   ops[i] = 'B';
  
 }
 for( let i=0;i<ops.length-1;i++){
-  //console.log(i);
+ 
   i++;
   slast[i] = 'B';
   last[i] = 'B';
@@ -176,20 +217,23 @@ last.splice(-2,1,'B');
  })
 
 }
-  }
+}
 }
 onChange=(rowIndex, columndIndex, e)=>{
   //console.log(event.target.value)
+  
+  
   const updatedRow = this.state.eqs[rowIndex].map((v, i) => {
     if (parseInt(columndIndex) === i ) {
       return e.target.value
     } 
     return v
+  
   })
  
-  console.log(e.key)
+
   
-    console.log(updatedRow)
+    
     this.setState({
       ...this.state,
       eqs: {
@@ -197,7 +241,7 @@ onChange=(rowIndex, columndIndex, e)=>{
         [rowIndex] : updatedRow
       }
     }, () => {
-      console.log(this.state)
+      console.log('onChange',this.state)
     })
 
 
@@ -214,9 +258,11 @@ let lrow = [];
 let temp = [];
 let BoxData = {};
 let u =1;
-lrow = board[board[0].length-2];
+console.log(board[0].length)
+//lrow = board[board[0].length-2];
+lrow = _.cloneDeep(board[0]);
 console.log(lrow)
-for(let i =0 ; i<lrow.length;i++){
+for(let i =0 ; i<lrow.length-2;i++){
   if(lrow[i]==='='){
     temp.push(FLAGS.CHECKBOX_IS_FALSE)
     BoxData = {
@@ -375,8 +421,9 @@ playGame(){
   let options = OpsandMiss[1];
   let missingArray = OpsandMiss[0]; 
   gboard  = this.initPlayBoard(gboard);
+
   gboard = {
-    [`${-1}`]:options,
+    [-1]:options,
     ...gboard
   }
   this.setState((prevState) => {
@@ -400,23 +447,24 @@ console.log(solvedArr)
 
 
 }
-checkSolutions(addedValue,r,c) {
-  console.log(addedValue);
+checkSolutions(mArr) {
+  //console.log(addedValue);
  
-  let missArr = _.cloneDeep(this.state.missingArray);
-  let solvedArrr = _.cloneDeep(this.state.solvedArr);
-  console.log('solved arr is ',solvedArrr);
-  console.log('miss arrray is', missArr)
+  // let missArr = _.cloneDeep(this.state.missingArray);
+   let solvedArrr = _.cloneDeep(this.state.solvedArr);
+  // console.log('solved arr is ',solvedArrr);
+  // console.log('miss arrray is', missArr)
   console.log(this.state)
-  if(r!=='-1'){
-             missArr[r/2][c/2] = addedValue;
-  }
-   console.log('msiarr is ',missArr)
+  // if(r!=='-1'){
+  //            missArr[r/2][c/2] = addedValue;
+  //           // missArr[r2/2][c2/2] = faddedValue;
+  // }
+  //  console.log('msiarr is ',missArr)
   
   this.setState((prevState) => {
     return {
       ...prevState,
-      missingArray:missArr,
+      missingArray:mArr,
     
     }
   })
@@ -440,7 +488,7 @@ console.log('checkBox data',checkboxData)
 for(let i =0 ; i<solvedArrr.length;i++){
   let rowFlag = true;
   for(let j =0;j<solvedArrr[i].length;j++){
-    if(solvedArrr[i][j]!==missArr[i][j]){
+    if(solvedArrr[i][j]!==mArr[i][j]){
        rowFlag = false;
     }
 
@@ -458,7 +506,7 @@ for(let i =0 ; i<solvedArrr.length;i++){
 for(let i =0 ; i<solvedArrr[0].length;i++){
   let colFlag = true;
   for(let j =0;j<solvedArrr.length;j++){
-    if(solvedArrr[i][j]!==missArr[i][j]){
+    if(solvedArrr[i][j]!==mArr[i][j]){
        colFlag = false;
     }
 
@@ -474,26 +522,40 @@ for(let i =0 ; i<solvedArrr[0].length;i++){
   }
 }
 console.log(checkboxData)
-this.setPlayBoard(missArr,checkboxData);
+this.setPlayBoard(mArr,checkboxData);
           
         
 // pass new missingArray and checkboxdata to the estPlayboard()
 
 
 }
+checkNull(v){
+ let k = document.getElementById('rows').value
+  if(v.length==0||k.length==0){
+    alert('Cannot be Empty')
+    return false
+  }
+return 
+}
   render() {
     return (
       <div className="App" style={{
         position: 'absolute',
+        left: 0,
+        right: 0,
+        color:'white',
+        
       
       }}>
-         <Input onChange = {this.handleChange}/>
-        
+         {/* <Input onChange = {this.handleChange}/> */}
+        <div style={{display:'flex',height:20}}> No of Eq<input size='1' id = 'rows' onChange={this.checkNull}></input> Sample Eq<input size='1' id= 'eqs' type='text'  ></input> 
+                   <button onClick={this.handleChange}>START</button>
+                    </div>           
         <div className = 'demoWrapper parent'>
           {this.state.eqs?<Table eqs={this.state.eqs} onChange={this.onChange} gameset='false'
-           onDragStart={this.handleDragStart}
-           onDragOver={this.handleDragOver}
-           onDrop={this.handleDrop}/>:''}
+           onDragStart={null}
+           onDragOver={null}
+           onDrop={null}/>:''}
           {this.state.neweq?<Table eqs ={this.state.neweq} gameset = 'true'
            onDragStart={this.handleDragStart}
            onDragOver={this.handleDragOver}
@@ -503,8 +565,8 @@ this.setPlayBoard(missArr,checkboxData);
           onDragOver={this.handleDragOver}
           onDrop={this.handleDrop}/>:''}
       </div>
-      <button onClick={this.setGame}>Set game</button>
-        <button onClick={this.playGame}>Play Game</button>
+      { this.state.eqs?<button onClick={this.setGame}>Set game</button>:''}
+      { this.state.neweq?<button onClick={this.playGame}>Play Game</button>:''}
       </div>
       
     )
