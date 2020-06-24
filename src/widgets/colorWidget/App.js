@@ -21,7 +21,7 @@ class App extends React.Component {
     "width": 100,
     "height": 100,
     "url": "https://unsplash.com/photos/yC-Yzbqy7PY",
-    "download_url": "https://picsum.photos/id/0/100/100"
+    "download_url": "https://picsum.photos/id/0/75/75"
   },
   {
     "id": "1",
@@ -29,7 +29,7 @@ class App extends React.Component {
     "width": 5616,
     "height": 3744,
     "url": "https://unsplash.com/photos/LNRyGwIJr5c",
-    "download_url": "https://picsum.photos/id/1/100/100"
+    "download_url": "https://picsum.photos/id/1/75/75"
   },
   {
     "id": "2",
@@ -37,7 +37,7 @@ class App extends React.Component {
     "width": 2500,
     "height": 1667,
     "url": "https://unsplash.com/photos/6J--NXulQCs",
-    "download_url": "https://picsum.photos/id/10/100/100"
+    "download_url": "https://picsum.photos/id/10/75/75"
   },
   {
     "id": "3",
@@ -45,7 +45,7 @@ class App extends React.Component {
     "width": 2500,
     "height": 1656,
     "url": "https://unsplash.com/photos/pwaaqfoMibI",
-    "download_url": "https://picsum.photos/id/100/100/100"
+    "download_url": "https://picsum.photos/id/100/75/75"
   },
   {
     "id": "4",
@@ -53,7 +53,7 @@ class App extends React.Component {
     "width": 5626,
     "height": 3635,
     "url": "https://unsplash.com/photos/6cY-FvMlmkQ",
-    "download_url": "https://picsum.photos/id/1000/100/100"
+    "download_url": "https://picsum.photos/id/1000/75/75"
   },
   {
     "id": "5",
@@ -61,7 +61,7 @@ class App extends React.Component {
     "width": 5616,
     "height": 3744,
     "url": "https://unsplash.com/photos/1DkWWN1dr-s",
-    "download_url": "https://picsum.photos/id/1001/100/100"
+    "download_url": "https://picsum.photos/id/1001/75/75"
   },
   {
     "id": "6",
@@ -69,7 +69,7 @@ class App extends React.Component {
     "width": 4312,
     "height": 2868,
     "url": "https://unsplash.com/photos/6-jTZysYY_U",
-    "download_url": "https://picsum.photos/id/1002/100/100"
+    "download_url": "https://picsum.photos/id/1002/75/75"
   },
   {
     "id": "7",
@@ -77,7 +77,7 @@ class App extends React.Component {
     "width": 1181,
     "height": 1772,
     "url": "https://unsplash.com/photos/GYumuBnTqKc",
-    "download_url": "https://picsum.photos/id/1003/100/100"
+    "download_url": "https://picsum.photos/id/1003/75/75"
   },
   {
     "id": "8",
@@ -554,8 +554,10 @@ const style ={
    <div className="main"
    style={{
     position: 'absolute',
-     width:100,
-     height:100
+    //  width:100,
+    //  height:100
+    left: 0,
+        right: 0,
   
   }}>
      <div className='white'>
@@ -580,14 +582,11 @@ const style ={
     <Table newboard={this.state.board} move={this.move} bg={this.state.imglist}/>
     {console.log(this.state)}
     
-        <div class="parent">
-            {/* {console.log(this.state)}
-              <div>
-            {this.state.r0 ? '✔' :''}
-          </div>
-
-          <div>{this.state.r5 ? '✔' :''}</div> 
-            {} */}
+        <div class="parent" style={{
+          width:30
+        }}>
+           
+          <div>{this.state.r0 ? '✔' :''} </div>
           <div>{this.state.r1 ? '✔' :''}</div>
           <div>{this.state.r2 ? '✔' :''}</div>
           <div>{this.state.r3 ? '✔' :''}</div> 

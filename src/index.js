@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-//import App from './widgets/colorWidget/App';
-import App from './App'
+import App from './widgets/colorWidget/App';
+//import App from './App'
 import NexweaveSandbox from './components/NexweaveSanbox';
 import SimpleWidget from './widgets/simpleWidget'
 import * as serviceWorker from './serviceWorker';

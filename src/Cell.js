@@ -59,14 +59,14 @@ const Cell = ({ rowIndex, columnIndex, cellValue, onDragOver,onDragStart,onDrop 
       return ''
      }
      if(cellValue==='CheckboxTrue'){
-       return <i className='tick'>'✔'</i>
+       return <i className='tick'>✔</i>
      }
      return cellValue
-   
+    
    
     }
     const setDrag=(c)=>{
-      console.log("inside set drag")
+      console.log("inside set drag",c)
         if(!c.match(/[+*\/-]/g)){
             return "true"
         }
@@ -76,19 +76,39 @@ const Cell = ({ rowIndex, columnIndex, cellValue, onDragOver,onDragStart,onDrop 
   
     }
     return (
-      <td id={columnIndex}>
-        <div  id={columnIndex} className="cell"   bg={bg} draggable ={setDrag(cellValue)} onDragStart={
-          onDragStart!==null?onDragStart({ row:rowIndex,col:columnIndex }):null}
-          onDragOver={ onDragOver!==null?onDragOver({ row: rowIndex,col:columnIndex }):null}
-          onDrop={onDrop!==null?onDrop({ row: rowIndex,col:columnIndex }):null}>
+      <tr row={index}>
+        <td>
+        <cell />
+        </td>
+        <td>
+          +
+        </td>
+        <td>
+          2
+        </td>
+        <td>
+         =
+        </td>
+        <td>
+          3
+        </td>
+        <td>
+          isCorrect ? <isChecked/> : <isNotChecked/>
+        </td>
+      </tr>
+      // <td id={columnIndex}>
+      //   <div  id={columnIndex} className="cell"   bg={bg} draggable ={setDrag(cellValue)} onDragStart={
+      //     onDragStart!==null?onDragStart({ row:rowIndex,col:columnIndex }):null}
+      //     onDragOver={ onDragOver!==null?onDragOver({ row: rowIndex,col:columnIndex }):null}
+      //     onDrop={onDrop!==null?onDrop({ row: rowIndex,col:columnIndex }):null}>
           
           
-            {
-              gameset!=='true'&&gameset!=='play'?renderCell():gameset==='true'?renderGame():renderPlay()
-            } 
+      //       {
+      //         gameset!=='true'&&gameset!=='play'?renderCell():gameset==='true'?renderGame():renderPlay()
+      //       } 
             
-        </div>
-      </td>
+      //   </div>
+      // </td>
       
     );
   }

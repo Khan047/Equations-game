@@ -37,7 +37,7 @@ max-width: inherit; */
  
   border: 1px solid gray;
 }​ */
-table>tr:nth-child(odd) >td{
+/* table>tr:nth-child(odd) >td{
   background-color: #ccc;
   border: 1px solid gray;
   border-radius: 5px;
@@ -52,19 +52,20 @@ table>tr:nth-last-child(2)>td{
 }
 table>tr:nth-last-child(1)>td{
   background-color:  rgb(243, 243, 243);
-  border: 1px solid gray;
-  border-radius: 5px;
+  border: 0;
+
   
 }
 table>tr>td:nth-last-child(odd){
   background-color:rgb(243, 243, 243) ;
+  border: 0;
 
 }
 table>tr>td:last-child{
   background-color:rgb(243, 243, 243) ;
-}
+} */
 .demoWrapper {
- 
+  width: 50%;
   padding: 10px;
   color: black;
   background: rgb(243, 243, 243);
@@ -72,9 +73,9 @@ table>tr>td:last-child{
   /* resize: both; */
   border: 1px dashed;
   overflow: auto;
-  /* max-width: 800px;
-  max-height: 450px;
-  min-width: 300px;
+   max-width: 100%;
+  max-height: 100%;
+  /*min-width: 300px;
   min-height: 300px; */
   /* max-width: inherit;
   max-height: inherit;
@@ -87,7 +88,44 @@ table>tr>td:last-child{
   background-color: indigo;
   border-radius: 10px;
 }
-.tick{
+ .tick{
   color:green;
-  border: 0 !important;
+  
+}
+.Foptions{
+  border : 1px solid indigo;
+background-color: indigo;
+border-radius: 10px;
+
+
+  
+}
+/* .fchild{
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+  font-weight: bold;
+  color: white;
+  border : 1px solid indigo;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+ 
+} */
+.fchild {
+  font-size: 20px;
+  /* height: 20px; */
+  width: 30px;
+  font-weight: bold;
+  color: black;
+  /* border: 1px solid indigo; */
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  cursor: pointer;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: white;
 }

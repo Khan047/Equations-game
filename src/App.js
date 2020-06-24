@@ -4,7 +4,7 @@ import Input from './Input';
 import Table from './Table'
 import React, { Component } from 'react'
 import _ from  'lodash';
-
+import Options from './Options';
 
 
 const FLAGS = {
@@ -40,14 +40,30 @@ export class App extends Component {
       let fcol = fromBox.col;
       let trow = toBox.row;
       let tcol = toBox.col;
-      
-      
+      let tops = _.cloneDeep(this.state.Coptions);
+      console.log(tops)
+      if(frow==-1){
+        let temp = tops[fcol];
+        
+        tops[fcol] = swapboard[trow][tcol];
+        swapboard[trow][tcol] = temp;
+      }
+      else if(trow==-1){
+        let temp = swapboard[frow][fcol];
+       
+        swapboard[frow][fcol] = tops[tcol];
+        tops[tcol] = temp;
+        
+
+
+        }
+      else{
       let temp = swapboard[frow][fcol];
      
       swapboard[frow][fcol] = swapboard[trow][tcol];
       swapboard[trow][tcol] = temp;
       let temp2 = swapboard[trow][tcol];
-
+      }
 
 
       console.log('swapped board is ',swapboard)
@@ -55,17 +71,24 @@ export class App extends Component {
       (prevState)=>{
         return{
           ...prevState,
+          Coptions:tops,
           gboard:swapboard
         }
       }
       )
       let  keys = Object.keys(swapboard);
+      console.log(keys)
       keys.pop()
       keys.pop()
       keys.pop()
-      keys.pop()
+     // keys.pop()
+     console.log(keys)
         for(let k =0; k<keys.length;k++){
-          keys.splice(k+1,1);
+          // keys.splice(k+1,1);
+          // k++;
+          if(keys[k]%2!=0){
+            keys.splice(k,1)
+          }
         }
        console.log(keys)
        let mArr = [];
@@ -96,10 +119,17 @@ export class App extends Component {
 
   }
   handleDragStart = data => event => {
-
+    if(event.target.id=='-1'){
+      let fromBox = JSON.stringify({row:-1,col:data.col})
+      event.dataTransfer.setData("dragContent", fromBox);
+      console.log('fromBox',fromBox)
+    }
+    else{
     let fromBox = JSON.stringify({ row: data.row, col: data.col });
-
     event.dataTransfer.setData("dragContent", fromBox);
+  }
+
+   
   };
 
   handleDragOver = data => event => {
@@ -112,14 +142,19 @@ export class App extends Component {
      // console.log(data)
     event.preventDefault();
   
-
-
-
+    if(data.row=='-1'){
+      let fromBox = JSON.parse(event.dataTransfer.getData("dragContent"));
+    let toBox = { row: data.row, col:data.col };
+    console.log('toBox',toBox)
+    this.swapBoxes(fromBox, toBox);
+    }
+    else{
     let fromBox = JSON.parse(event.dataTransfer.getData("dragContent"));
     let toBox = { row: data.row, col:data.col };
-
-
     this.swapBoxes(fromBox, toBox);
+      }
+
+    
     
     return false;
   };
@@ -260,9 +295,9 @@ let BoxData = {};
 let u =1;
 console.log(board[0].length)
 //lrow = board[board[0].length-2];
-lrow = _.cloneDeep(board[0]);
+lrow = _.cloneDeep(board[keys.length-2]);
 console.log(lrow)
-for(let i =0 ; i<lrow.length-2;i++){
+for(let i =0 ; i<lrow.length;i++){
   if(lrow[i]==='='){
     temp.push(FLAGS.CHECKBOX_IS_FALSE)
     BoxData = {
@@ -422,13 +457,14 @@ playGame(){
   let missingArray = OpsandMiss[0]; 
   gboard  = this.initPlayBoard(gboard);
 
-  gboard = {
-    [-1]:options,
-    ...gboard
-  }
+  // gboard = {
+  //   optK:options,
+  //   ...gboard
+  // }
   this.setState((prevState) => {
     return {
       ...prevState,
+      Coptions:options,
       missingArray:missingArray,
       solvedArr:solvedArr,
       gboard:gboard,
@@ -449,7 +485,8 @@ console.log(solvedArr)
 }
 checkSolutions(mArr) {
   //console.log(addedValue);
- 
+ console.log(mArr)
+
   // let missArr = _.cloneDeep(this.state.missingArray);
    let solvedArrr = _.cloneDeep(this.state.solvedArr);
   // console.log('solved arr is ',solvedArrr);
@@ -468,7 +505,7 @@ checkSolutions(mArr) {
     
     }
   })
-  // console.log(this.state)
+   console.log(this.state)
 // get what user has changed and add it to missingArray
 
 // compare missing array and solution array and on the basis of comparision create the checkboxData.
@@ -485,6 +522,7 @@ console.log('checkBox data',checkboxData)
           // checkboxData[f'r{i+1}'] = FLAG.CHECKBOX_is_ture
 //        else: 
           // checkboxData[f'r{i+1}'] = FLAG.CHECKBOX_is_false
+          console.log(solvedArrr)
 for(let i =0 ; i<solvedArrr.length;i++){
   let rowFlag = true;
   for(let j =0;j<solvedArrr[i].length;j++){
@@ -503,10 +541,12 @@ for(let i =0 ; i<solvedArrr.length;i++){
     checkboxData[`r${i+1}`] =FLAGS.CHECKBOX_IS_FALSE;
   }
 }
-for(let i =0 ; i<solvedArrr[0].length;i++){
+for(let i =0 ; i<solvedArrr[0].length;i++){ //3
   let colFlag = true;
-  for(let j =0;j<solvedArrr.length;j++){
-    if(solvedArrr[i][j]!==mArr[i][j]){
+  for(let j =0;j<solvedArrr.length;j++){ //2 
+    console.log('sle',solvedArrr[j][i],'i=',i,'j=',j);
+    console.log('mle',mArr[j][i],'i=',i,'j=',j)
+    if(solvedArrr[j][i]!==mArr[j][i]){
        colFlag = false;
     }
 
@@ -544,11 +584,12 @@ return
         left: 0,
         right: 0,
         color:'white',
+        justifyContent:'center'
         
       
       }}>
          {/* <Input onChange = {this.handleChange}/> */}
-        <div style={{display:'flex',height:20}}> No of Eq<input size='1' id = 'rows' onChange={this.checkNull}></input> Sample Eq<input size='1' id= 'eqs' type='text'  ></input> 
+        <div style={{display:'flex',height:25}}> No of Eq<input size='1' id = 'rows' onChange={this.checkNull}></input> Sample Eq<input size='1' id= 'eqs' type='text'  ></input> 
                    <button onClick={this.handleChange}>START</button>
                     </div>           
         <div className = 'demoWrapper parent'>
@@ -560,10 +601,21 @@ return
            onDragStart={this.handleDragStart}
            onDragOver={this.handleDragOver}
            onDrop={this.handleDrop}/>:''}
+           {this.state.Coptions?<Options ops={this.state.Coptions}
+             onDragStart={this.handleDragStart}
+             onDragOver={this.handleDragOver}
+             onDrop={this.handleDrop}
+           />:''}
           {this.state.playable?<Table eqs ={this.state.gboard} gameset = 'play'
           onDragStart={this.handleDragStart}
           onDragOver={this.handleDragOver}
-          onDrop={this.handleDrop}/>:''}
+          onDrop={this.handleDrop}
+          style={{"table_tr_nth_child_odd___td":{"backgroundColor":"#ccc","border":"1px solid gray","borderRadius":"5px"},"table_tr_nth_child_even__td":{"backgroundColor":"rgb(243, 243, 243)"},"table_tr_nth_last_child_2__td":{"backgroundColor":"rgb(243, 243, 243)"},"table_tr_nth_last_child_1__td":{"backgroundColor":"rgb(243, 243, 243)","border":"0"},"table_tr_td_nth_last_child_odd":{"backgroundColor":"rgb(243, 243, 243)","border":"0"},"table_tr_td_last_child":{"backgroundColor":"rgb(243, 243, 243)"}}}
+          
+          
+          
+          
+          />:''}
       </div>
       { this.state.eqs?<button onClick={this.setGame}>Set game</button>:''}
       { this.state.neweq?<button onClick={this.playGame}>Play Game</button>:''}
