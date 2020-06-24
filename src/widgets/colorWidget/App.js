@@ -1,7 +1,8 @@
 import React from 'react';
 import Table from './Table';
 import './App.css';
-
+import { Input, Button } from 'antd';
+import 'antd/dist/antd.css'
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -561,9 +562,9 @@ const style ={
   
   }}>
      <div className='white'>
-        <input id ="row" placeholder="enter row" type='number' min='3' max='4'></input> <input id ="col" placeholder="enter col" type='number' min='3' max='4'></input>
+        <Input id ="row" placeholder="enter row" type='number' min='3' max='4' size='middle'/> <Input id ="col" placeholder="enter col" type='number' min='3' max='4'/>
        
-        <button onClick={(event)=>{
+        <Button type = 'primary' onClick={(event)=>{
        
           let row = parseInt(document.getElementById('row').value);
           let col = parseInt(document.getElementById('col').value);
@@ -572,7 +573,7 @@ const style ={
          this.renderTicks(row);
           //this.handleChange(row);
       }
-          }>Play Game</button>
+          }>Play Game</Button>
           
 
           {console.log(this.state)}

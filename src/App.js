@@ -29,13 +29,13 @@ export class App extends Component {
      
       gameSet:false,
       
-      neweq:[]
+      
     }
   }
   swapBoxes = (fromBox, toBox) => {
     
       console.log(fromBox,toBox);
-      let swapboard =this.state.gboard;
+      let swapboard =this.state.playMatrix;
       let frow = fromBox.row;
       let fcol = fromBox.col;
       let trow = toBox.row;
@@ -72,7 +72,7 @@ export class App extends Component {
         return{
           ...prevState,
           Coptions:tops,
-          gboard:swapboard
+          playMatrix:swapboard
         }
       }
       )
@@ -246,7 +246,8 @@ last.splice(-2,1,'B');
   }
 }
  this.setState({
-  eqs:eq
+  eqs:eq,
+  
  },()=>{
    console.log(this.state)
  })
@@ -408,7 +409,7 @@ setPlayBoard(LHSArray, checkboxData){
   // }
   const testCheckboxData = _.cloneDeep(checkboxData)
   this.setState((prevState) => {
-    const newGboard = _.cloneDeep(prevState.gboard)
+    const newGboard = _.cloneDeep(prevState.playMatrix)
     console.log(newGboard)
     const rows = LHSArray.length
     const columns = LHSArray[0].length
@@ -440,14 +441,14 @@ setPlayBoard(LHSArray, checkboxData){
 
     console.log('newGboard:',newGboard)
    
-    return {gboard:newGboard}
+    return {playMatrix:newGboard}
   })
 
 
 }
 playGame(){
   
-  var gboard = _.cloneDeep(this.state.neweq);
+  var gboard = _.cloneDeep(this.state.eqs);
   console.log(gboard)
   let solvedArr = this.getSolarray(gboard);
   let solvedArr2 = _.cloneDeep(solvedArr)
@@ -467,9 +468,9 @@ playGame(){
       Coptions:options,
       missingArray:missingArray,
       solvedArr:solvedArr,
-      gboard:gboard,
-      neweq:false,
-      playable:true
+      playMatrix:gboard,
+      // neweq:false,
+      playable:'play'
     }
   })
 console.log(solvedArr)
@@ -477,11 +478,6 @@ console.log(solvedArr)
  
   console.log(gboard)
   
-  
-
-
-
-
 }
 checkSolutions(mArr) {
   //console.log(addedValue);
@@ -593,20 +589,20 @@ return
                    <button onClick={this.handleChange}>START</button>
                     </div>           
         <div className = 'demoWrapper parent'>
-          {this.state.eqs?<Table eqs={this.state.eqs} onChange={this.onChange} gameset='false'
-           onDragStart={null}
-           onDragOver={null}
-           onDrop={null}/>:''}
-          {this.state.neweq?<Table eqs ={this.state.neweq} gameset = 'true'
+          {this.state.eqs?<Table eqs={this.state.playMatrix?this.state.playMatrix:this.state.eqs} onChange={this.onChange} gameset={this.state.playable}
+           onDragStart={this.state.playMatrix?this.handleDragStart:null}
+           onDragOver={this.state.playMatrix?this.handleDragOver:null}
+           onDrop={this.state.playMatrix?this.handleDrop:null}/>:''}
+          {/* {this.state.neweq?<Table eqs ={this.state.neweq} gameset = 'true'
            onDragStart={this.handleDragStart}
            onDragOver={this.handleDragOver}
-           onDrop={this.handleDrop}/>:''}
+           onDrop={this.handleDrop}/>:''} */}
            {this.state.Coptions?<Options ops={this.state.Coptions}
              onDragStart={this.handleDragStart}
              onDragOver={this.handleDragOver}
              onDrop={this.handleDrop}
            />:''}
-          {this.state.playable?<Table eqs ={this.state.gboard} gameset = 'play'
+          {/* {this.state.playable?<Table eqs ={this.state.eqs} gameset = 'play'
           onDragStart={this.handleDragStart}
           onDragOver={this.handleDragOver}
           onDrop={this.handleDrop}
@@ -615,10 +611,10 @@ return
           
           
           
-          />:''}
+          />:''} */}
       </div>
-      { this.state.eqs?<button onClick={this.setGame}>Set game</button>:''}
-      { this.state.neweq?<button onClick={this.playGame}>Play Game</button>:''}
+      {/* { this.state.eqs?<button onClick={this.setGame}>Set game</button>:''} */}
+      { this.state.eqs?<button onClick={this.playGame}>Play Game</button>:''}
       </div>
       
     )

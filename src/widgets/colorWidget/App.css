@@ -86,7 +86,14 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
-    width: 30%;
+    left: 20%;
+    right: 20%;
+   
     
   }
 
+.uhh{
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+}
