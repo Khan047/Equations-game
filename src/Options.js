@@ -11,7 +11,7 @@ const Options = ({ ops,onDragStart,onDragOver,onDrop}) => {
                     onDrop={onDrop!==null?onDrop({ row: -1,col:i }):null}>
                     
                     
-                      {ops[i]}
+                      {ops[i]=='B'?'':ops[i]}
                       
                   </div>
             })}

@@ -1,14 +1,14 @@
 import React from 'react'
-import { Input } from 'antd';
+
 
 const Cell = ({ rowIndex, columnIndex, cellValue, onDragOver,onDragStart,onDrop ,bg ,onChange,eqs,gameset}) => {
   
     const renderCell = () => {
         if(cellValue !== 'B' && cellValue === 'O'){
           return <input 
-              placeholder='OPERATOR' 
+              placeholder='+' 
               size='1' 
-              
+              className='Ops'
               // value={eqs[rowIndex][columnIndex]}
               onChange={(event)=>{ 
 
@@ -28,7 +28,7 @@ const Cell = ({ rowIndex, columnIndex, cellValue, onDragOver,onDragStart,onDrop 
         if(cellValue === 'B'){
           return ""
         }
-        return <input placeholder='OPERAND' size='1' onChange={(event)=>{
+        return <input  className='form' placeholder='a' size='1' onChange={(event)=>{
           if(event.target.value.match(/[0-9]/g)){
           onChange(rowIndex, columnIndex, event)
         }
@@ -66,7 +66,7 @@ const Cell = ({ rowIndex, columnIndex, cellValue, onDragOver,onDragStart,onDrop 
    
     }
     const setDrag=(c)=>{
-      console.log("inside set drag",c)
+      
         if(!c.match(/[+*\/-]/g)){
             return "true"
         }

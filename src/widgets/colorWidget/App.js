@@ -578,13 +578,14 @@ const style ={
 
           {console.log(this.state)}
           </div>
-        
-         <div className= 'game'>    
+          <div className='wrapClass'>
+         <div className= 'game'>  
+
     <Table newboard={this.state.board} move={this.move} bg={this.state.imglist}/>
     {console.log(this.state)}
     
         <div class="parent" style={{
-          width:30
+         
         }}>
            
           <div>{this.state.r0 ? '✔' :''} </div>
@@ -596,6 +597,7 @@ const style ={
             {/* {this.state.arr.map((a,i)=>{return <div>{this.state.r`${i}`? '✔' :''}</div>})} */}
         </div>
         </div>   
+   </div>
    </div>
     );
   }

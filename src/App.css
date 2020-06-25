@@ -1,8 +1,9 @@
 
 .App{
   margin: 0 auto;
-  display: inline-block;
+
   color:white;
+
 }
 
 
@@ -64,7 +65,16 @@ table>tr>td:nth-last-child(odd){
 table>tr>td:last-child{
   background-color:rgb(243, 243, 243) ;
 } */
+.wrapclass{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+ 
+}
 .demoWrapper {
+ 
+  /* float:right; */
   width: 50%;
   padding: 10px;
   color: black;
@@ -128,4 +138,53 @@ border-radius: 10px;
   padding: 5px;
   border-radius: 10px;
   background-color: white;
+}
+.form{
+  
+  
+ 
+  border: 1px solid black;
+  padding: 0px;
+  border-radius: 5px;
+  width:50px;
+  height: 30px;
+  display: block;
+  text-align: center;
+}
+.Ops{
+  
+  
+ 
+  border: none;
+  /* padding: 0px; */
+  border-radius: 5px;
+  text-align: center;
+  /* width:50px; */
+  /* height: 30px; */
+  display: block;
+}
+
+.myButton {
+	background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
+	background-color:#007dc1;
+	border-radius:7px;
+	border:3px solid #124d77;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:10;
+	padding:12px 24px;
+  text-decoration:none;
+  text-align: center;
+  width: 150px;
+  height: 40px;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
+	background-color:#0061a7;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
 }

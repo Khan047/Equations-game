@@ -1,11 +1,13 @@
 
 import './App.css';
-import Input from './Input';
+//import Input from './Input';
 import Table from './Table'
 import React, { Component } from 'react'
 import _ from  'lodash';
 import Options from './Options';
-
+import { Input, Button } from 'antd';
+import { findLastIndex } from 'underscore';
+//import 'antd/dist/antd.css'
 
 const FLAGS = {
   CHECKBOX_IS_NA: 'NA',
@@ -27,7 +29,7 @@ export class App extends Component {
     this.swapBoxes = this.swapBoxes.bind(this);
     this.state={
      
-      gameSet:false,
+     
       
       
     }
@@ -35,13 +37,14 @@ export class App extends Component {
   swapBoxes = (fromBox, toBox) => {
     
       console.log(fromBox,toBox);
-      let swapboard =this.state.playMatrix;
+      let swapboard =_.cloneDeep(this.state.playMatrix);
+      let equationTemp= _.cloneDeep(this.state.eqs);
       let frow = fromBox.row;
       let fcol = fromBox.col;
       let trow = toBox.row;
       let tcol = toBox.col;
       let tops = _.cloneDeep(this.state.Coptions);
-      console.log(tops)
+    //  console.log(tops)
       if(frow==-1){
         let temp = tops[fcol];
         
@@ -63,11 +66,179 @@ export class App extends Component {
       swapboard[frow][fcol] = swapboard[trow][tcol];
       swapboard[trow][tcol] = temp;
       let temp2 = swapboard[trow][tcol];
+      // let A = _.cloneDeep(swapboard[frow]);
+      // let B = _.cloneDeep(swapboard[trow]);
+      // let C = _.cloneDeep(equationTemp[frow]);
+      // let D = _.cloneDeep(equationTemp[trow])
+      // console.log(A,B,C,D)
+      // if(A[A.length-1]=='CheckboxTrue'){
+      //     A.pop()
+      //    // swapboard[frow].pop()
+      // }
+      // if(B[B.length-1]=='CheckboxTrue'){
+      //   B.pop()
+      //   //swapboard[frow].pop()
+      // }
+      // if(_.isEqual(A,C)){
+       
+      //   swapboard[frow].push('CheckboxTrue')
+      // }
+      // if(_.isEqual(B,D)){
+      //   swapboard[trow].push('CheckboxTrue')
+      // }
       }
 
 
       console.log('swapped board is ',swapboard)
-      this.setState(
+      // this.setState(
+      // (prevState)=>{
+      //   return{
+      //     ...prevState,
+      //     Coptions:tops,
+      //     playMatrix:swapboard
+      //   }
+      // }
+      // )
+      let  keys = Object.keys(swapboard);
+      let Tempkeys = _.cloneDeep(keys);
+      let TempColKeys = [];
+      let TempColRowsKeys = _.cloneDeep(keys)
+      let finalRow = Object.keys(swapboard);
+      Tempkeys.pop();
+      Tempkeys.pop();
+      //console.log(keys)
+      keys.pop()
+      keys.pop()
+      keys.pop()
+     // keys.pop()
+     //console.log(keys)
+        for(let k =0; k<keys.length;k++){
+          // keys.splice(k+1,1);
+          // k++;
+          if(keys[k]%2!=0){
+            keys.splice(k,1)
+          }
+        }
+        for(let k =0; k<Tempkeys.length;k++){
+          // keys.splice(k+1,1);
+          // k++;
+          if(Tempkeys[k]%2!=0){
+            Tempkeys.splice(k,1)
+          }
+        }
+     //  console.log(keys)
+       //let mArr = [];
+          //let rowAssign = new Array(finalRow.length).fill('NA');
+         // console.log(rowAssign)
+        Tempkeys.forEach(
+          Tempkey => {
+            let rowSl = _.cloneDeep(swapboard[Tempkey]);
+            
+            console.log(rowSl)
+            let rowEq = _.cloneDeep(equationTemp[Tempkey]);
+            console.log(rowEq)
+            if(rowSl[rowSl.length-1]==FLAGS.CHECKBOX_IS_TRUE){
+                rowSl.pop()
+            }
+            console.log('rowSl=',rowSl,'swapboard[Tempkey]=',swapboard[Tempkey])
+            console.log(_.isEqual(rowEq,rowSl))
+            if(_.isEqual(rowEq,rowSl)){
+              console.log('row mathchess');
+              if(swapboard[Tempkey][swapboard[Tempkey].length-1]!=='CheckboxTrue'){
+              swapboard[Tempkey].push(FLAGS.CHECKBOX_IS_TRUE)
+              
+              }
+
+              // if(rowAssign[Tempkey]!=FLAGS.CHECKBOX_IS_TRUE){
+              // rowAssign.splice(Tempkey,1,FLAGS.CHECKBOX_IS_TRUE)
+              // }
+              //swapboard[Tempkey].splice(-1,1,FLAGS.CHECKBOX_IS_TRUE)
+            }
+            // else if(!(_.isEqual(rowEq,rowSl))){
+              else{
+                console.log('NO MATHC');
+                
+             console.log('element to remove',swapboard[Tempkey][swapboard[0].length-1])
+             // console.log(swapboard[trow][swapboard[0].length-1])
+              if(swapboard[Tempkey][swapboard[Tempkey].length-1]=='CheckboxTrue'){
+                
+                swapboard[Tempkey].splice(swapboard[Tempkey].length-1,1)
+                // console.log(swapboard[Tempkey][swapboard[0].length-1])
+                // console.log('swapFFF_',swapboard)
+                }
+
+                
+                
+                // if(frow!=='-1'){
+                // if(swapboard[frow][swapboard[0].length-1]=='CheckboxTrue'){
+                //   swapboard[frow].splice(swapboard[0].length-1,1)
+                // }}
+            //  rowAssign.splice(Tempkey,1,FLAGS.CHECKBOX_IS_NA)
+            }
+           
+            
+        
+          }
+        )
+        //  console.log(rowAssign)
+          // for(let i=0;i<rowAssign.length;i++){
+           
+          //     swapboard[i].push(rowAssign[i])
+            
+          // }
+      // 
+      let checkerArr = []
+      let checkerArr2 = []
+      let icantnameuggg = new Array(equationTemp[0].length).fill('NA');
+      let calNos = _.cloneDeep(equationTemp[0].length);
+      let w =0;
+      for(let i =0;i<calNos-2;i++){
+        if(i%2==0){
+          TempColKeys.push(i);
+        }
+      }
+      console.log(TempColKeys)
+      TempColKeys.forEach(
+        keya=>{
+      Tempkeys.forEach(
+        TempColkey =>{
+          checkerArr.push(swapboard[TempColkey][keya])
+          checkerArr2.push(equationTemp[TempColkey][keya])
+          // for(let j=0;j<swapboard[Tempkey].length-2;j++){
+          // let colSl = _.cloneDeep(swapboard[Tempkey][j])
+          // j++;
+
+        
+        }
+        
+      )
+      //perform check here 
+      console.log('colums one is ',checkerArr)
+      console.log('colums  two is ',checkerArr2)
+      if(_.isEqual(checkerArr,checkerArr2)){
+       // icantnameuggg.push(FLAGS.CHECKBOX_IS_TRUE)
+        icantnameuggg.splice(Tempkeys[w],1,FLAGS.CHECKBOX_IS_TRUE)
+        w++;
+      }
+      else{
+       // icantnameuggg.push(FLAGS.CHECKBOX_IS_FALSE)
+       icantnameuggg.splice(Tempkeys[w],1,FLAGS.CHECKBOX_IS_FALSE)
+       w++;
+      }
+       checkerArr = []
+       checkerArr2 = []
+        }
+      )
+
+      //  console.log('new miss array in swapboxes',mArr);
+     
+    //  console.log(this.state)
+    swapboard = {
+      ...swapboard,
+      b:icantnameuggg
+
+    }
+    this.setState(
       (prevState)=>{
         return{
           ...prevState,
@@ -76,44 +247,26 @@ export class App extends Component {
         }
       }
       )
-      let  keys = Object.keys(swapboard);
-      console.log(keys)
-      keys.pop()
-      keys.pop()
-      keys.pop()
-     // keys.pop()
-     console.log(keys)
-        for(let k =0; k<keys.length;k++){
-          // keys.splice(k+1,1);
-          // k++;
-          if(keys[k]%2!=0){
-            keys.splice(k,1)
-          }
-        }
-       console.log(keys)
-       let mArr = [];
-            
-        keys.forEach(
-          key => {
-            const row = swapboard[key]
-            const t2 = [];
-            const length = row.length -3 ;
-            for(let i=0; i<length;i++){
-              //let x = parseInt(row[i])
-              if(!isNaN(parseInt(row[i]))||row[i]==='B'){
-                console.log("key ="+key,"row[i] =",row[i],"i =",i)
-                
-                t2.push(row[i]);
-               console.log('t2 is ',t2)
-              }
-            }if(t2.length!==0)mArr.push(t2);
-          }
-        )
-        console.log('new miss array in swapboxes',mArr);
-     
-      console.log(this.state)
     
-       this.checkSolutions(mArr);
+    let mArr = [];
+            
+    keys.forEach(
+      key => {
+        const row = swapboard[key]
+        const t2 = [];
+        const length = row.length -3 ;
+        for(let i=0; i<length;i++){
+          //let x = parseInt(row[i])
+          if(!isNaN(parseInt(row[i]))||row[i]==='B'){
+            console.log("key ="+key,"row[i] =",row[i],"i =",i)
+            
+            t2.push(row[i]);
+           console.log('t2 is ',t2)
+          }
+        }if(t2.length!==0)mArr.push(t2);
+      }
+    )
+     //  this.checkSolutions(mArr);
      
 
 
@@ -122,7 +275,7 @@ export class App extends Component {
     if(event.target.id=='-1'){
       let fromBox = JSON.stringify({row:-1,col:data.col})
       event.dataTransfer.setData("dragContent", fromBox);
-      console.log('fromBox',fromBox)
+    //  console.log('fromBox',fromBox)
     }
     else{
     let fromBox = JSON.stringify({ row: data.row, col: data.col });
@@ -225,7 +378,7 @@ slast.splice(-1,1,'B');
 slast.splice(-2,1,'B');
 last.splice(-1,1,'B');
 last.splice(-2,1,'B');
- console.log(slast)
+ //console.log(slast)
  let i =0;
 
  for (let [key, value] of Object.entries(eq)) {
@@ -423,21 +576,21 @@ setPlayBoard(LHSArray, checkboxData){
       }
   
       // check if checkbox data is present
-      if(testCheckboxData) {
-        console.log(`r${gboardKey}`,testCheckboxData[`r${i+1}`])
-        const gboardLastColIndex = newGboard[gboardKey].length - 1
-        newGboard[gboardKey][gboardLastColIndex] = testCheckboxData[`r${i+1}`]
-      }
+      // if(testCheckboxData) {
+      //   console.log(`r${gboardKey}`,testCheckboxData[`r${i+1}`])
+      //   const gboardLastColIndex = newGboard[gboardKey].length - 1
+      //   newGboard[gboardKey][gboardLastColIndex] = testCheckboxData[`r${i+1}`]
+      // }
       
     }
   
   
-    if (testCheckboxData) {//checkCol
-      const columnKeys = Object.keys(testCheckboxData).filter( key => key.includes('c'))
-      for (let i=0; i<columnKeys.length; i++) {
-        newGboard['checkCol'][2*i] = testCheckboxData[columnKeys[i]]
-      }
-    }
+    // if (testCheckboxData) {//checkCol
+    //   const columnKeys = Object.keys(testCheckboxData).filter( key => key.includes('c'))
+    //   for (let i=0; i<columnKeys.length; i++) {
+    //     newGboard['checkCol'][2*i] = testCheckboxData[columnKeys[i]]
+    //   }
+    // }
 
     console.log('newGboard:',newGboard)
    
@@ -456,7 +609,7 @@ playGame(){
    const OpsandMiss = this.getQarray(solvedArr2);
   let options = OpsandMiss[1];
   let missingArray = OpsandMiss[0]; 
-  gboard  = this.initPlayBoard(gboard);
+  //gboard  = this.initPlayBoard(gboard);
 
   // gboard = {
   //   optK:options,
@@ -466,8 +619,8 @@ playGame(){
     return {
       ...prevState,
       Coptions:options,
-      missingArray:missingArray,
-      solvedArr:solvedArr,
+    //  missingArray:missingArray,
+    //  solvedArr:solvedArr,
       playMatrix:gboard,
       // neweq:false,
       playable:'play'
@@ -577,31 +730,39 @@ return
     return (
       <div className="App" style={{
         position: 'absolute',
-        left: 0,
-        right: 0,
+      //  display:'block',
+      left: 0,
+      right: 0,
+      top:0,
+      bottom:0,
         color:'white',
         justifyContent:'center'
         
       
       }}>
          {/* <Input onChange = {this.handleChange}/> */}
-        <div style={{display:'flex',height:25}}> No of Eq<input size='1' id = 'rows' onChange={this.checkNull}></input> Sample Eq<input size='1' id= 'eqs' type='text'  ></input> 
-                   <button onClick={this.handleChange}>START</button>
-                    </div>           
-        <div className = 'demoWrapper parent'>
-          {this.state.eqs?<Table eqs={this.state.playMatrix?this.state.playMatrix:this.state.eqs} onChange={this.onChange} gameset={this.state.playable}
-           onDragStart={this.state.playMatrix?this.handleDragStart:null}
-           onDragOver={this.state.playMatrix?this.handleDragOver:null}
-           onDrop={this.state.playMatrix?this.handleDrop:null}/>:''}
-          {/* {this.state.neweq?<Table eqs ={this.state.neweq} gameset = 'true'
-           onDragStart={this.handleDragStart}
-           onDragOver={this.handleDragOver}
-           onDrop={this.handleDrop}/>:''} */}
-           {this.state.Coptions?<Options ops={this.state.Coptions}
+       { this.state.playable!=='play'?<div style={{display:'flex',height:40,}}> No of Eq<input size='30' id = 'rows' onChange={this.checkNull}/> Sample Eq<input size='30' id= 'eqs' type='text'  />
+                   <button className="myButton"type="primary"onClick={this.handleChange}>START</button>
+                    </div>:''  } 
+          <div className='wrapclass'>        
+        <div className ={this.state.eqs?'demoWrapper':'none'} >
+        {this.state.Coptions?<Options ops={this.state.Coptions}
              onDragStart={this.handleDragStart}
              onDragOver={this.handleDragOver}
              onDrop={this.handleDrop}
            />:''}
+          {this.state.eqs?<Table eqs={this.state.playMatrix?this.state.playMatrix:this.state.eqs} onChange={this.onChange} gameset={this.state.playable}
+           onDragStart={this.state.playMatrix?this.handleDragStart:null}
+           onDragOver={this.state.playMatrix?this.handleDragOver:null}
+           onDrop={this.state.playMatrix?this.handleDrop:null}
+            style={this.state.playable?{"table_tr_nth_child_odd___td":{"backgroundColor":"#ccc","border":"1px solid gray","borderRadius":"5px"},"table_tr_nth_child_even__td":{"backgroundColor":"rgb(243, 243, 243)"},"table_tr_nth_last_child_2__td":{"backgroundColor":"rgb(243, 243, 243)"},"table_tr_nth_last_child_1__td":{"backgroundColor":"rgb(243, 243, 243)","border":"0"},"table_tr_td_nth_last_child_odd":{"backgroundColor":"rgb(243, 243, 243)","border":"0"},"table_tr_td_last_child":{"backgroundColor":"rgb(243, 243, 243)"}}:{}}
+           
+           />:''}
+          {/* {this.state.neweq?<Table eqs ={this.state.neweq} gameset = 'true'
+           onDragStart={this.handleDragStart}
+           onDragOver={this.handleDragOver}
+           onDrop={this.handleDrop}/>:''} */}
+
           {/* {this.state.playable?<Table eqs ={this.state.eqs} gameset = 'play'
           onDragStart={this.handleDragStart}
           onDragOver={this.handleDragOver}
@@ -612,9 +773,12 @@ return
           
           
           />:''} */}
+           { this.state.eqs?<button onClick={this.playGame} style={{color:'black'}}>Play Game</button>:''}
       </div>
+      
       {/* { this.state.eqs?<button onClick={this.setGame}>Set game</button>:''} */}
-      { this.state.eqs?<button onClick={this.playGame}>Play Game</button>:''}
+     
+      </div>
       </div>
       
     )
