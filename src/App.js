@@ -1,12 +1,12 @@
 
 import './App.css';
-//import Input from './Input';
+import Input from './Input';
 import Table from './Table'
 import React, { Component } from 'react'
 import _ from  'lodash';
 import Options from './Options';
-import { Input, Button } from 'antd';
-import { findLastIndex } from 'underscore';
+//import { Input, Button } from 'antd';
+//import { findLastIndex } from 'underscore';
 //import 'antd/dist/antd.css'
 
 const FLAGS = {
@@ -29,7 +29,7 @@ export class App extends Component {
     this.swapBoxes = this.swapBoxes.bind(this);
     this.state={
      
-     
+     eqs:'start'
       
       
     }
@@ -623,7 +623,7 @@ playGame(){
     //  solvedArr:solvedArr,
       playMatrix:gboard,
       // neweq:false,
-      playable:'play'
+      playable:'true'
     }
   })
 console.log(solvedArr)
@@ -733,7 +733,7 @@ return
       //  display:'block',
       left: 0,
       right: 0,
-      top:0,
+      top:50,
       bottom:0,
         color:'white',
         justifyContent:'center'
@@ -741,23 +741,27 @@ return
       
       }}>
          {/* <Input onChange = {this.handleChange}/> */}
-       { this.state.playable!=='play'?<div style={{display:'flex',height:40,}}> No of Eq<input size='30' id = 'rows' onChange={this.checkNull}/> Sample Eq<input size='30' id= 'eqs' type='text'  />
-                   <button className="myButton"type="primary"onClick={this.handleChange}>START</button>
-                    </div>:''  } 
-          <div className='wrapclass'>        
-        <div className ={this.state.eqs?'demoWrapper':'none'} >
+     
+          <div className='wrapclass'> 
+          
+        {/* <div className ={this.state.eqs?'demoWrapper':'none'} > */}
+        <div className ='demoWrapper' >
+        { this.state.playable!=='true'&&this.state.eqs=='start'?<Input onChange={this.checkNull} onClick={this.handleChange}/>:''  } 
+        <div>
         {this.state.Coptions?<Options ops={this.state.Coptions}
              onDragStart={this.handleDragStart}
              onDragOver={this.handleDragOver}
              onDrop={this.handleDrop}
            />:''}
-          {this.state.eqs?<Table eqs={this.state.playMatrix?this.state.playMatrix:this.state.eqs} onChange={this.onChange} gameset={this.state.playable}
+          
+          {this.state.eqs&&this.state.eqs!=='start'?<Table eqs={this.state.playMatrix?this.state.playMatrix:this.state.eqs} onChange={this.onChange} gameset={this.state.playable?'play':false}
            onDragStart={this.state.playMatrix?this.handleDragStart:null}
            onDragOver={this.state.playMatrix?this.handleDragOver:null}
            onDrop={this.state.playMatrix?this.handleDrop:null}
-            style={this.state.playable?{"table_tr_nth_child_odd___td":{"backgroundColor":"#ccc","border":"1px solid gray","borderRadius":"5px"},"table_tr_nth_child_even__td":{"backgroundColor":"rgb(243, 243, 243)"},"table_tr_nth_last_child_2__td":{"backgroundColor":"rgb(243, 243, 243)"},"table_tr_nth_last_child_1__td":{"backgroundColor":"rgb(243, 243, 243)","border":"0"},"table_tr_td_nth_last_child_odd":{"backgroundColor":"rgb(243, 243, 243)","border":"0"},"table_tr_td_last_child":{"backgroundColor":"rgb(243, 243, 243)"}}:{}}
+            style={this.state.playable?{"table_tr_nth_child_odd___td":{"backgroundColor":"#ccc","border":"1px solid gray","borderRadius":"5px"},"table_tr_nth_child_even__td":{"backgroundColor":"rgb(243, 243, 243)"},"table_tr_nth_last_child_2__td":{"backgroundColor":"rgb(243, 243, 243)"},"table_tr_nth_last_child_1__td":{"backgroundColor":"rgb(243, 243, 243)","border":"0"},"table_tr_td_nth_last_child_odd":{"backgroundColor":"rgb(243, 243, 243)","border":"0"},"table_tr_td_last_child":{"backgroundColor":"rgb(243, 243, 243)"},"width":"50%","float":"right"}:{}}
            
            />:''}
+           </div>
           {/* {this.state.neweq?<Table eqs ={this.state.neweq} gameset = 'true'
            onDragStart={this.handleDragStart}
            onDragOver={this.handleDragOver}
@@ -773,7 +777,7 @@ return
           
           
           />:''} */}
-           { this.state.eqs?<button onClick={this.playGame} style={{color:'black'}}>Play Game</button>:''}
+           { this.state.eqs!=='start'&&this.state.playable!=='true'?<button onClick={this.playGame}  className="myButton">Play Game</button>:''}
       </div>
       
       {/* { this.state.eqs?<button onClick={this.setGame}>Set game</button>:''} */}

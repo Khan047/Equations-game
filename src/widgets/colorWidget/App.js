@@ -14,7 +14,7 @@ class App extends React.Component {
 
       rownos:null,
       imglist:null,
-      default:false,
+    
       imgarr:[
   {
     "id": "0",
@@ -534,17 +534,17 @@ for (var row = 0, n = table.rows.length; row < n; row++) {
 }
 
 renderTicks(r){
-  let arr = [];
+//   let arr = [];
  
-  for(let i=0;i<r;i++){
-arr.push(i)
-  this.setState({
-    tickmarks:arr
-  },()=>{
-    console.log('not again')
-  })
-//return arr
-}
+//   for(let i=0;i<r;i++){
+// arr.push(i)
+//   this.setState({
+//     tickmarks:arr
+//   },()=>{
+//     console.log('not again')
+//   })
+// //return arr
+// }
 }
   render() {
 
@@ -562,7 +562,7 @@ const style ={
   
   }}>
      <div className='white'>
-        <Input id ="row" placeholder="enter row" type='number' min='3' max='4' size='middle'/> <Input id ="col" placeholder="enter col" type='number' min='3' max='4'/>
+        <Input id ="row" placeholder="enter row" type='number' min='3' max='5' size='middle'/> <Input id ="col" placeholder="enter col" type='number' min='3' max='6'/>
        
         <Button type = 'primary' onClick={(event)=>{
        
